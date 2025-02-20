@@ -1,0 +1,17 @@
+[
+    {
+        "texto": "Volar a Panam\u00e1",
+        "fecha": "20/02/2025",
+        "estado": false
+    },
+    {
+        "texto": "Volar a Uruguay",
+        "fecha": "20/02/2025",
+        "estado": false
+    },
+    {
+        "texto": "Volver a Argentina",
+        "fecha": "20/02/2025",
+        "estado": false
+    }
+]

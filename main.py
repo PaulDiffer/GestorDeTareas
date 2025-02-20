@@ -21,8 +21,9 @@ class GestorTareas:
     def __init__(self, root):
         self.root = root
         self.root.title("Gestor de Tareas")
-        
-        self.frame_tareas = tk.Frame(self.root)
+        self.root.config(bg="dark green")  # Cambia el fondo de la ventana
+
+        self.frame_tareas = tk.Frame(self.root, bg="dark green")  # Fondo del frame
         self.frame_tareas.pack(pady=10, padx=10, fill="both", expand=True)
         
         self.tareas = []
@@ -44,7 +45,7 @@ class GestorTareas:
 
     def agregar_tarea(self, texto="", fecha="", estado=False):
         # Crear un contenedor para la tarea
-        frame_tarea = tk.Frame(self.frame_tareas, bg="white", pady=5, padx=5, relief="ridge", bd=2)
+        frame_tarea = tk.Frame(self.frame_tareas, bg="light gray", pady=5, padx=5, relief="ridge", bd=2)
         frame_tarea.pack(fill="x", pady=2)
 
         # Entrada de texto para la tarea
@@ -55,12 +56,12 @@ class GestorTareas:
 
         # Mostrar la fecha de creación
         fecha_creacion = fecha if fecha else datetime.datetime.now().strftime("%d/%m/%Y")
-        label_fecha = tk.Label(frame_tarea, text=fecha_creacion, bg="white", fg="black", width=12)
+        label_fecha = tk.Label(frame_tarea, text=fecha_creacion, bg="light gray", fg="black", width=12)
         label_fecha.pack(side="left")
 
         # Checkbox para marcar la tarea
         var_estado = tk.BooleanVar(value=estado)
-        check_boton = tk.Checkbutton(frame_tarea, variable=var_estado)
+        check_boton = tk.Checkbutton(frame_tarea, variable=var_estado, bg="light gray")
         check_boton.pack(side="right")
 
         if estado:
@@ -69,7 +70,7 @@ class GestorTareas:
         self.tareas.append({"frame": frame_tarea, "entry": entry_tarea, "label_fecha": label_fecha, "estado": var_estado})
 
     def eliminar_tareas(self):
-        for tarea in self.tareas[:]:  # Copia de la lista para evitar problemas al eliminar elementos
+        for tarea in self.tareas[:]:
             if tarea["estado"].get():
                 tarea["frame"].destroy()
                 self.tareas.remove(tarea)
@@ -83,12 +84,12 @@ class GestorTareas:
         for tarea in self.tareas:
             if tarea["estado"].get():
                 tarea["entry"].config(bg="white", fg="black")
-                tarea["estado"].set(False)  # Desmarca el checkbox
+                tarea["estado"].set(False)
 
     def modificar_tarea(self):
         for tarea in self.tareas:
             if tarea["estado"].get():
-                tarea["entry"].config(state="normal")  # Permite editar nuevamente
+                tarea["entry"].config(state="normal")
 
     def guardar_listado(self):
         lista_guardada = []
@@ -113,3 +114,7 @@ class GestorTareas:
 root = tk.Tk()
 app = GestorTareas(root)
 root.mainloop()
+
+
+
+
