@@ -1,7 +1,5 @@
 """ Gestor de Tareas con Interfaz Gráfica
-1-Usar Tkinter o PyQt para la interfaz.
-2-Permite agregar, eliminar y marcar tareas como completadas.
-3-Guarda las tareas en un archivo JSON o SQLite.
+
 ¿Qué hace este código?
 ✔ Muestra una ventana con una barra de menú.
 ✔ Al presionar "Agregar tarea", se muestra un cuadro de diálogo para ingresar texto.
@@ -21,9 +19,9 @@ class GestorTareas:
     def __init__(self, root):
         self.root = root
         self.root.title("Gestor de Tareas")
-        self.root.config(bg="dark green")  # Cambia el fondo de la ventana
+        self.root.config(bg="dark green")  # Fondo de la ventana
 
-        self.frame_tareas = tk.Frame(self.root, bg="dark green")  # Fondo del frame
+        self.frame_tareas = tk.Frame(self.root, bg="dark green")  
         self.frame_tareas.pack(pady=10, padx=10, fill="both", expand=True)
         
         self.tareas = []
@@ -37,31 +35,31 @@ class GestorTareas:
         menu_tareas.add_command(label="Desmarcar tarea como realizada", command=self.desmarcar_completadas)
         menu_tareas.add_command(label="Modificar tarea", command=self.modificar_tarea)
         menu_tareas.add_command(label="Guardar Listado", command=self.guardar_listado)
-        
-        menu_bar.add_cascade(label="Tareas", menu=menu_tareas)
+        menu_tareas.add_command(label="Cargar Listado", command=self.cargar_listado)  
+
+        # Agregar el menú a la barra de menú
+        menu_bar.add_cascade(label="Opciones", menu=menu_tareas)
+
+        # Configurar la ventana para que use esta barra de menú
         self.root.config(menu=menu_bar)
 
-        self.cargar_listado()  # Cargar tareas guardadas
+        self.cargar_listado()  # Carga automática al iniciar
 
     def agregar_tarea(self, texto="", fecha="", estado=False):
-        # Crear un contenedor para la tarea
-        frame_tarea = tk.Frame(self.frame_tareas, bg="light gray", pady=5, padx=5, relief="ridge", bd=2)
+        frame_tarea = tk.Frame(self.frame_tareas, bg="dark green", pady=5, padx=5, relief="ridge", bd=2)
         frame_tarea.pack(fill="x", pady=2)
 
-        # Entrada de texto para la tarea
-        entry_tarea = tk.Entry(frame_tarea, bg="white", fg="black", borderwidth=1)
+        entry_tarea = tk.Entry(frame_tarea, bg="black", fg="white", borderwidth=1)  
         entry_tarea.pack(side="left", fill="x", expand=True)
-        entry_tarea.insert(0, texto)  # Si se cargan desde JSON
-        entry_tarea.focus()  # Para que el cursor aparezca directamente
+        entry_tarea.insert(0, texto)  
+        entry_tarea.focus()
 
-        # Mostrar la fecha de creación
         fecha_creacion = fecha if fecha else datetime.datetime.now().strftime("%d/%m/%Y")
-        label_fecha = tk.Label(frame_tarea, text=fecha_creacion, bg="light gray", fg="black", width=12)
+        label_fecha = tk.Label(frame_tarea, text=fecha_creacion, bg="dark green", fg="white", width=12)
         label_fecha.pack(side="left")
 
-        # Checkbox para marcar la tarea
         var_estado = tk.BooleanVar(value=estado)
-        check_boton = tk.Checkbutton(frame_tarea, variable=var_estado, bg="light gray")
+        check_boton = tk.Checkbutton(frame_tarea, variable=var_estado, bg="dark green", fg="white", selectcolor="black")
         check_boton.pack(side="right")
 
         if estado:
@@ -83,7 +81,7 @@ class GestorTareas:
     def desmarcar_completadas(self):
         for tarea in self.tareas:
             if tarea["estado"].get():
-                tarea["entry"].config(bg="white", fg="black")
+                tarea["entry"].config(bg="black", fg="white")
                 tarea["estado"].set(False)
 
     def modificar_tarea(self):
@@ -107,6 +105,12 @@ class GestorTareas:
         if os.path.exists("tareas.json"):
             with open("tareas.json", "r", encoding="utf-8") as archivo:
                 lista_cargada = json.load(archivo)
+
+                # Limpiar tareas actuales antes de cargar nuevas
+                for tarea in self.tareas:
+                    tarea["frame"].destroy()
+                self.tareas.clear()
+
                 for tarea in lista_cargada:
                     self.agregar_tarea(tarea["texto"], tarea["fecha"], tarea["estado"])
 
@@ -114,6 +118,8 @@ class GestorTareas:
 root = tk.Tk()
 app = GestorTareas(root)
 root.mainloop()
+
+
 
 
 
